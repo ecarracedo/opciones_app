@@ -1,6 +1,8 @@
 ## ops/compra_put.py
 import pandas as pd
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Evita problemas con el backend de matplotlib en algunos entornos
 import matplotlib.pyplot as plt
 
 def calcular_venta_put(precio_strike, prima, cant_contratos=1, rango=40):
