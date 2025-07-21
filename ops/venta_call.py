@@ -46,13 +46,14 @@ def calcular_venta_call (precio_strike, prima, cant_contratos=1, rango=40):
     # Texto del punto de equilibrio
     ax.text(
         punto_equilibrio,
-        df['Resultado'].min() + 5,
+        (df['Resultado'].min() + df['Resultado'].max()) / 2,
         f'PE: {punto_equilibrio:.2f}',
         rotation=90,
         color='blue',
         fontsize=12,
-        verticalalignment='bottom',
-        ha='center'
+        ha='center',
+        va='center',
+        bbox=dict(facecolor='white', alpha=0.6, edgecolor='none')
     )
 
     # Línea principal del gráfico

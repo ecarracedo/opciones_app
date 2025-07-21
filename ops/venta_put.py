@@ -17,7 +17,7 @@ def calcular_venta_put(precio_strike, prima, cant_contratos=1, rango=40):
     for precio_sub in precios:
         resultado = (prima - max(0, precio_strike - precio_sub)) * cant_contratos
         datos.append([precio_sub, resultado])
-        
+
     df = pd.DataFrame(datos, columns=['Precio Subyacente', 'Resultado'])
 
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -41,17 +41,15 @@ def calcular_venta_put(precio_strike, prima, cant_contratos=1, rango=40):
     ax.axvline(x=punto_equilibrio, color='blue', linestyle='--', label='Punto de equilibrio')
 
     # Texto rotado del punto de equilibrio (alineado sin desplazar gráfico)
-    ax.annotate(
+    ax.text(
+        punto_equilibrio,
+        (df['Resultado'].min() + df['Resultado'].max()) / 2,
         f'PE: {punto_equilibrio:.2f}',
-        xy=(punto_equilibrio, (df['Resultado'].min() + df['Resultado'].max()) / 2),
-        xycoords='data',
-        textcoords='offset points',
-        xytext=(0, 0),  # sin desplazamiento
+        rotation=90,
+        color='blue',
+        fontsize=12,
         ha='center',
         va='center',
-        rotation=90,
-        fontsize=12,
-        color='blue',
         bbox=dict(facecolor='white', alpha=0.6, edgecolor='none')
     )
 
