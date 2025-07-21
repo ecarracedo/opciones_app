@@ -1,8 +1,16 @@
 import streamlit as st
+import sys
+from pathlib import Path
+
+# Añade la carpeta principal al path temporalmente
+sys.path.append(str(Path(__file__).parent))
+
 from ops.compra_call import calcular_compra_call
-from ops.venta_call import calcular_venta_call
 from ops.compra_put import calcular_compra_put
+from ops.venta_call import calcular_venta_call
 from ops.venta_put import calcular_venta_put
+
+
 
 # Configuración de la página
 st.set_page_config(page_title="Calculadora de Opciones", layout="centered")

@@ -1,6 +1,17 @@
 .env
 .vscode
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info
+*.eggs
+*.log
+*.sqlite3
+*.db
+*.DS_Store
+*.coverage
+*.idea
+*.vscode
 
-
-#file
-.python-version
