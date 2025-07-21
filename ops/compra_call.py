@@ -6,7 +6,7 @@ matplotlib.use('Agg')  # Evita problemas con el backend de matplotlib en algunos
 import matplotlib.pyplot as plt
 
 def calcular_compra_call(precio_strike, prima, cant_contratos=1, rango=40):
-    # --- (Mantén tu lógica actual aquí) --- #
+
     punto_equilibrio = precio_strike + prima
     precios = np.arange(punto_equilibrio - rango*10, punto_equilibrio + rango*8, rango)
     
@@ -21,12 +21,41 @@ def calcular_compra_call(precio_strike, prima, cant_contratos=1, rango=40):
     
     df = pd.DataFrame(datos, columns=['Precio Sub', 'Resultado'])
     
-    # Gráfico (opcional: devuelve el fig de matplotlib)
+    # Gráfico
     fig, ax = plt.subplots(figsize=(10, 6))
-    ax.axhline(y=0, color='blue', linestyle='--')  # Línea horizontal para el punto de equilibrio
+
+    # Línea horizontal para el punto de equilibrio
+    ax.axhline(y=0, color='blue', linestyle='--')  
     ax.axhline(y=-(prima), color='r', linestyle='--', label='Pérdida máxima')  # Línea horizontal para la pérdida máxima
-    ax.axvline(x=punto_equilibrio, color='blue', linestyle='--', label='Punto de equilibrio')  # Línea vertical para el punto de equilibrio  
     
+    # Texto de perdida máxima en el gráfico
+
+    perdida_max = -prima * cant_contratos
+    ax.text(
+        (df['Precio Sub'].min() + df['Precio Sub'].max()) / 2,
+        perdida_max - 1,
+        f'Pérdida máxima: {perdida_max:.2f}',
+        color='red',
+        fontsize=12,
+        ha='center',
+        verticalalignment='top'
+    )
+    
+    # Línea vertical para el punto de equilibrio  
+    ax.axvline(x=punto_equilibrio, color='blue', linestyle='--', label='Punto de equilibrio')  
+    
+    # Texto del punto de equilibrio
+    ax.text(
+        punto_equilibrio,
+        df['Resultado'].min() + 5,
+        f'PE: {punto_equilibrio:.2f}',
+        rotation=90,
+        color='blue',
+        fontsize=12,
+        verticalalignment='bottom',
+        ha='center'
+    )
+
     # Línea principal del gráfico
     ax.plot(df['Precio Sub'], df['Resultado'], marker='o', color='black', label='Payoff Opción')  # Plotea el payoff de la opción
 

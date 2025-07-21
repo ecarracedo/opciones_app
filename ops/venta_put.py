@@ -1,34 +1,69 @@
-## ops/compra_put.py
+# ops/venta_put.py
 import pandas as pd
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')  # Evita problemas con el backend de matplotlib en algunos entornos
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 def calcular_venta_put(precio_strike, prima, cant_contratos=1, rango=40):
     punto_equilibrio = precio_strike - prima
     precios = np.arange(punto_equilibrio - rango*8, punto_equilibrio + rango*10, rango)
-    
+
     if punto_equilibrio not in precios:
         precios = np.append(precios, punto_equilibrio)
         precios = np.sort(precios)
-    
+
     datos = []
     for precio_sub in precios:
-        resultado = (max(0, precio_strike - precio_sub) - prima) * cant_contratos
+        resultado = (prima - max(0, precio_strike - precio_sub)) * cant_contratos
         datos.append([precio_sub, resultado])
-    
+        
     df = pd.DataFrame(datos, columns=['Precio Subyacente', 'Resultado'])
-    
-    # Gráfico
+
     fig, ax = plt.subplots(figsize=(10, 6))
-    ax.plot(df['Precio Subyacente'], df['Resultado'], marker='o', color='black')
-    ax.axhline(0, color='black', linestyle='--')
-    ax.axvline(punto_equilibrio, color='red', linestyle='--', label=f'Punto de equilibrio: {punto_equilibrio}')
-    ax.set_title('Estrategia Compra de Put')
-    ax.set_xlabel('Precio Subyacente')
-    ax.set_ylabel('Ganancia/Pérdida')
-    ax.legend()
-    ax.grid(True)
-    
+
+    # Línea de ganancia máxima
+    ganancia_max = prima * cant_contratos
+    ax.axhline(y=ganancia_max, color='g', linestyle='--', label='Ganancia máxima')
+
+    # Texto de ganancia máxima
+    ax.text(
+        (df['Precio Subyacente'].min() + df['Precio Subyacente'].max()) / 2,
+        ganancia_max + 1,
+        f'Ganancia máxima: {ganancia_max:.2f}',
+        color='green',
+        fontsize=12,
+        ha='center',
+        va='bottom'
+    )
+
+    # Línea del punto de equilibrio
+    ax.axvline(x=punto_equilibrio, color='blue', linestyle='--', label='Punto de equilibrio')
+
+    # Texto rotado del punto de equilibrio (alineado sin desplazar gráfico)
+    ax.annotate(
+        f'PE: {punto_equilibrio:.2f}',
+        xy=(punto_equilibrio, (df['Resultado'].min() + df['Resultado'].max()) / 2),
+        xycoords='data',
+        textcoords='offset points',
+        xytext=(0, 0),  # sin desplazamiento
+        ha='center',
+        va='center',
+        rotation=90,
+        fontsize=12,
+        color='blue',
+        bbox=dict(facecolor='white', alpha=0.6, edgecolor='none')
+    )
+
+    # Línea de payoff
+    ax.plot(df['Precio Subyacente'], df['Resultado'], marker='o', color='black', label='Payoff Opción')
+
+    # Estética general
+    ax.set_title('Resultado de una Venta de PUT', fontsize=16)
+    ax.set_xlabel('Precio Subyacente', fontsize=14)
+    ax.set_ylabel('Ganancia / Pérdida', fontsize=14)
+    ax.grid(color='gray', linestyle='--', linewidth=0.5)
+    ax.legend(fontsize=12)
+    ax.set_in_layout(True)
+
     return df, fig

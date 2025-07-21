@@ -19,16 +19,49 @@ def calcular_compra_put(precio_strike, prima, cant_contratos=1, rango=40):
         datos.append([precio_sub, resultado])
     
     df = pd.DataFrame(datos, columns=['Precio Subyacente', 'Resultado'])
-    
+
     # Gráfico
     fig, ax = plt.subplots(figsize=(10, 6))
-    ax.plot(df['Precio Subyacente'], df['Resultado'], marker='o', color='black')
-    ax.axhline(0, color='black', linestyle='--')
-    ax.axvline(punto_equilibrio, color='red', linestyle='--', label=f'Punto de equilibrio: {punto_equilibrio}')
-    ax.set_title('Estrategia Compra de Put')
-    ax.set_xlabel('Precio Subyacente')
-    ax.set_ylabel('Ganancia/Pérdida')
-    ax.legend()
-    ax.grid(True)
+
+    # Línea de pérdida máxima
+    perdida_max = -prima * cant_contratos
+    ax.axhline(y=perdida_max, color='r', linestyle='--', label='Pérdida máxima')
     
+    # Texto de pérdida máxima
+    ax.text(
+        (df['Precio Subyacente'].min() + df['Precio Subyacente'].max()) / 2,
+        perdida_max - 1,
+        f'Pérdida máxima: {perdida_max:.2f}',
+        color='red',
+        fontsize=12,
+        ha='center',
+        verticalalignment='top'
+    )
+
+    # Línea del punto de equilibrio
+    ax.axvline(x=punto_equilibrio, color='blue', linestyle='--', label='Punto de equilibrio')
+
+    # Texto del punto de equilibrio
+    ax.text(
+        punto_equilibrio,
+        df['Resultado'].min() + 5,
+        f'PE: {punto_equilibrio:.2f}',
+        rotation=90,
+        color='blue',
+        fontsize=12,
+        verticalalignment='bottom',
+        ha='center'
+    )
+
+    # Payoff
+    ax.plot(df['Precio Subyacente'], df['Resultado'], marker='o', color='black', label='Payoff Opción')
+
+    # Ejes y estilo
+    ax.set_title('Resultado de una Compra de PUT', fontsize=16)
+    ax.set_xlabel('Precio Subyacente', fontsize=14)
+    ax.set_ylabel('Ganancia / Pérdida', fontsize=14)
+    ax.grid(color='gray', linestyle='--', linewidth=0.5)
+    ax.legend(fontsize=12)
+    ax.set_in_layout(True)
+
     return df, fig
