@@ -44,6 +44,10 @@ Luego abre el enlace que aparece en la terminal para acceder a la interfaz web.
 https://opciones-app.streamlit.app/
 ---
 
+## Autor
+
+Desarrollado por Emiliano Carracedo | ecarracedo@gmail.com 
+
 ## English
 
 This application allows you to calculate and visualize the result of basic financial option strategies: Buy/Sell CALL and PUT. It uses [Streamlit](https://streamlit.io/) for the web interface and [matplotlib](https://matplotlib.org/) for charts.
@@ -86,3 +90,7 @@ Then open the link shown in the terminal to access the web
 ## URL
 
 https://opciones-app.streamlit.app/
+
+## Autor
+
+Developed by Emiliano Carracedo | ecarracedo@gmail.com 
